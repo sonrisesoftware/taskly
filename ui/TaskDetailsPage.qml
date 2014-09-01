@@ -38,7 +38,7 @@ Page {
         spacing: units.gu(1)
 
         Label {
-            text: task.hasDueDate ? i18n.tr("Due on %1").arg(task.dueDate.toDateString()) : ""
+            text: task.hasDueDate ? i18n.tr("Due %1").arg(task.dueDateString) : ""
             color: UbuntuColors.midAubergine
         }
 

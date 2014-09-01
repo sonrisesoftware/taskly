@@ -5,29 +5,39 @@ import Ubuntu.Components.ListItems 1.0 as ListItem
 import "../udata"
 import "../components"
 import "../upstream"
+import "../model"
 
 PageWithBottomEdge {
     id: page
-    title: "Tasks"
+    title: project ? project.title : "Tasks"
 
     property bool showCompletedTasks: false
+
+    property string predicate: project ? "projectId == '%1'".arg(project._id) : ""
+
+    property bool allowShowingCompletedTasks: true
+
+    property Project project
 
     head.actions: [
         Action {
             iconSource: showCompletedTasks ? "image://theme/select" : Qt.resolvedUrl("../icons/unselect.svg")
             text: "Show completed"
+            visible: allowShowingCompletedTasks
             onTriggered: {
                 showCompletedTasks = !showCompletedTasks
             }
-        },
+        }/*,
 
         Action {
             iconName: "settings"
             text: "Settings"
-        }
+        }*/
     ]
 
-    bottomEdgePageComponent: AddTaskPage {}
+    bottomEdgePageComponent: AddTaskPage {
+        project: page.project
+    }
 
     bottomEdgeTitle: i18n.tr("Add task")
 
@@ -48,8 +58,8 @@ PageWithBottomEdge {
             id: listItem
 
             checked: modelData.completed
-            text: modelData.title
-            subText: modelData.dueDate.toDateString()
+            text: formatText(modelData.title)
+            subText: modelData.dueDateString
 
             onCheckedChanged: {
                 modelData.completed = checked
@@ -113,8 +123,14 @@ PageWithBottomEdge {
         id: tasks
         type: "Task"
         groupBy: "section"
-        predicate: showCompletedTasks ? "" : "completed==0"
+        predicate: showCompletedTasks ? page.predicate : "completed==0" + (page.predicate ? " AND " + page.predicate : "")
         sortBy: "completed,dueDate,title"
         _db: database
+    }
+
+    function formatText(text) {
+        var regex = /(\d\d?:\d\d\s*(PM|AM|pm|am))/gi
+        text = text.replace(regex, "<font color=\"#3ca83c\">$1</font>")
+        return text
     }
 }

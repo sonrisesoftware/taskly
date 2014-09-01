@@ -51,7 +51,7 @@ ListItem.Empty {
             id: subLabel
 
             width: parent.width
-            height: visible ? implicitHeight: 0
+            //height: visible ? implicitHeight : 0
             fontSize: "small"
 
             visible: text !== ""

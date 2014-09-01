@@ -1,8 +1,12 @@
 import QtQuick 2.0
 import Ubuntu.Components 1.1
 
+import "../model"
+
 Page {
     title: "Add Task"
+
+    property Project project
 
     head.backAction: Action {
         iconName: "close"
@@ -21,7 +25,8 @@ Page {
                 database.create("Task", {
                                     title: titleField.text,
                                     description: descriptionField.text,
-                                    dueDate: date
+                                    dueDate: date,
+                                    projectId: project ? project._id : ""
                                 }, tasks)
                 pageStack.pop()
             }

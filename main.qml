@@ -34,45 +34,46 @@ MainView {
             id: tabs
 
             Tab {
-                objectName: "tasksTab"
+                objectName: "upcomingTab"
                 title: page.title
                 page: TasksPage {
-
+                    title: "Upcoming"
+                    predicate: "dueDate != 'null'"
+                    allowShowingCompletedTasks: false
                 }
             }
 
-    //        Tab {
-    //            objectName: "upcomingTab"
-    //            title: page.title
-    //            page: Page {
-    //                title: "Upcoming Tasks"
-    //            }
-    //        }
+            Tab {
+                objectName: "inboxTab"
+                title: page.title
+                page: TasksPage {
+                    title: "Inbox"
+                    predicate: "projectId==''"
+                }
+            }
 
-    //        Tab {
-    //            objectName: "uncategorizedTab"
-    //            title: page.title
-    //            page: Page {
-    //                title: "Uncategorized Tasks"
-    //            }
-    //        }
-
-    //        Tab {
-    //            objectName: "projectsPage"
-    //            title: page.title
-    //            page: Page {
-    //                title: "Projects"
-    //            }
-    //        }
+            Tab {
+                objectName: "projectsPage"
+                title: page.title
+                page: ProjectsPage {
+                }
+            }
         }
     }
 
     Database {
         id: database
 
+        version: 2
         name: "taskly"
         description: "Taskly for Ubuntu Touch"
         modelPath: Qt.resolvedUrl("model")
+
+        onUpgrade: {
+            if (version < 2) {
+                tx.executeSql("ALTER TABLE Task ADD projectId TEXT");
+            }
+        }
     }
 }
 

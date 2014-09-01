@@ -7,14 +7,24 @@ Document {
     id: task
     _type: "Task"
 
-    _properties: ["title", "description", "completed", "dueDate"]
+    _properties: ["title", "description", "completed", "dueDate", "projectId"]
 
     property string title
     property string description
     property bool completed: false
     property date dueDate
+    property string projectId
 
     property bool hasDueDate: DateUtils.isValid(dueDate)
+
+    property string dueDateString: {
+        if (hasDueDate) {
+            var dateString = DateUtils.formattedDate(dueDate)
+            return dateString
+        } else {
+            return ""
+        }
+    }
 
     property string section: {
         print("Updating sections")

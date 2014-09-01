@@ -4,3 +4,6 @@
 [submodule "qml-extras"]
 	path = qml-extras
 	url =  https://github.com/iBeliever/qml-extras.git
+[submodule "ubuntu-ui-extras"]
+	path = ubuntu-ui-extras
+	url = https://github.com/iBeliever/ubuntu-ui-extras.git
