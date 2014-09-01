@@ -15,9 +15,13 @@ Page {
             text: "Add task"
             enabled: titleField.acceptableInput
             onTriggered: {
+                var date = new Date(dateField.text)
+                print(dateField.text, date)
+
                 database.create("Task", {
                                     title: titleField.text,
-                                    description: descriptionField.text
+                                    description: descriptionField.text,
+                                    dueDate: date
                                 }, tasks)
                 pageStack.pop()
             }
@@ -56,6 +60,17 @@ Page {
             }
 
             placeholderText: "Description"
+        }
+
+        TextField {
+            id: dateField
+
+            anchors {
+                left: parent.left
+                right: parent.right
+            }
+
+            placeholderText: "Due date"
         }
     }
 }

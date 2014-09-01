@@ -39,11 +39,17 @@ PageWithBottomEdge {
         anchors.fill: parent
         model: tasks
 
+        section.property: "section"
+        section.delegate: ListItem.Header {
+            text: section
+        }
+
         delegate: TaskListItem {
             id: listItem
 
             checked: modelData.completed
             text: modelData.title
+            subText: modelData.dueDate.toDateString()
 
             onCheckedChanged: {
                 modelData.completed = checked
@@ -102,8 +108,9 @@ PageWithBottomEdge {
     Query {
         id: tasks
         type: "Task"
+        groupBy: "section"
         predicate: showCompletedTasks ? "" : "completed==0"
-        sortBy: "completed,title"
+        sortBy: "completed,dueDate,title"
         _db: database
     }
 }

@@ -44,6 +44,7 @@ ListItem.Empty {
             elide: Text.ElideRight
 
             fontSize: "medium"
+            color: UbuntuColors.midAubergine
         }
 
         Label {
