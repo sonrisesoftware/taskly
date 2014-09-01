@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Taskly
+Exec=qmlscene $@ main.qml
+Icon=taskly.png
+Terminal=false
+Type=Application
+X-Ubuntu-Touch=true
+

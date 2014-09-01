@@ -1,0 +1,15 @@
+{
+    "architecture": "all",
+    "description": "description of tasks-reboot-app",
+    "framework": "ubuntu-sdk-14.10-dev2",
+    "hooks": {
+        "ubuntu-tasks": {
+            "apparmor": "ubuntu-tasks.json",
+            "desktop": "ubuntu-tasks.desktop"
+        }
+    },
+    "maintainer": "Sonrise Software",
+    "name": "com.ubuntu.developer.mdspencer.tasks-reboot-app",
+    "title": "tasks-reboot-app",
+    "version": "0.1"
+}
