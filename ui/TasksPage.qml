@@ -56,6 +56,10 @@ PageWithBottomEdge {
                 if (modelData)
                     checked = Qt.binding(function() { return modelData.completed })
             }
+
+            onClicked: {
+                pageStack.push(Qt.resolvedUrl("TaskDetailsPage.qml"), {task: modelData})
+            }
         }
     }
 

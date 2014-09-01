@@ -14,11 +14,13 @@ Document {
     property bool completed: false
     property date dueDate
 
+    property bool hasDueDate: DateUtils.isValid(dueDate)
+
     property string section: {
         print("Updating sections")
         if (completed)
             return i18n.tr("Completed")
-        else if (!DateUtils.isValid(dueDate))
+        else if (!hasDueDate)
             return i18n.tr("No Due Date")
         else if (DateUtils.dateIsBefore(dueDate, new Date()))
             return i18n.tr("Overdue")
