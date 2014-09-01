@@ -1,6 +1,6 @@
 [submodule "udata"]
 	path = udata
-	url = gh:sonrisesoftware/udata
+	url =  https://github.com/sonrisesoftware/udata.git
 [submodule "qml-extras"]
 	path = qml-extras
-	url = gh:iBeliever/qml-extras
+	url =  https://github.com/iBeliever/qml-extras.git
