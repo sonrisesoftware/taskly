@@ -48,6 +48,8 @@ MainView {
                 title: page.title
                 page: TasksPage {
                     title: "Inbox"
+
+                    // The Inbox page only shows tasks not associated with any project
                     predicate: "projectId==''"
                 }
             }

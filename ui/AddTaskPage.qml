@@ -82,11 +82,13 @@ Page {
 
         ListItem.SingleValue {
             text: DateUtils.isValid(date) ? "Change due date" : "Add due date"
-            value: date.toDateString()
+            value: "<font color=\"%1\">%2</font>".arg(UbuntuColors.midAubergine).arg(date.toDateString())
 
             progression: true
 
             onClicked: PopupUtils.open(dateDialog)
+
+            showDivider: false
         }
     }
 
