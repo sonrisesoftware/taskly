@@ -68,6 +68,10 @@ Page {
             }
 
             placeholderText: "Description"
+
+            // Expand up to 15 lines, always showing at least 5 lines
+            property int lines: Math.min(Math.max(descriptionField.lineCount, 5), 15)
+            height: lines * (descriptionField.font.pixelSize + units.dp(2)) + 2 * descriptionField.__styleInstance.frameSpacing
         }
     }
 
