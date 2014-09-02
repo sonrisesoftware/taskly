@@ -9,4 +9,8 @@ Document {
     _properties: ["title"]
 
     property string title
+
+    onRemoved: {
+        _db.removeWithPredicate('Task', "projectId=='%1'".arg(_id))
+    }
 }

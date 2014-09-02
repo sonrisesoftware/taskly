@@ -1,8 +1,10 @@
 import QtQuick 2.2
 import Ubuntu.Components 1.1
+import Ubuntu.Components.Popups 1.0
 import Ubuntu.Components.ListItems 1.0 as ListItem
 
 import "../udata"
+import "../ubuntu-ui-extras"
 import "../components"
 import "../upstream"
 import "../model"
@@ -27,12 +29,26 @@ PageWithBottomEdge {
             onTriggered: {
                 showCompletedTasks = !showCompletedTasks
             }
-        }/*,
+        },
 
         Action {
-            iconName: "settings"
-            text: "Settings"
-        }*/
+            iconName: "delete"
+            text: "Delete project"
+            visible: project != null
+
+            onTriggered: {
+                project.remove()
+                pageStack.pop()
+            }
+        },
+
+        Action {
+            iconName: "edit"
+            text: "Rename project"
+            visible: project != null
+            onTriggered: PopupUtils.open(renameProjectDialog)
+        }
+
     ]
 
     bottomEdgePageComponent: AddTaskPage {
@@ -79,7 +95,7 @@ PageWithBottomEdge {
         spacing: units.gu(0.5)
 
         Icon {
-            name: !hasTasks ? "add" : "ok"
+            name: noTasksYet ? "add" : "ok"
             opacity: 0.5
             width: units.gu(10)
             height: width
@@ -96,7 +112,7 @@ PageWithBottomEdge {
             anchors.horizontalCenter: parent.horizontalCenter
             opacity: 0.5
 
-            text: !hasTasks ? i18n.tr("No tasks yet!") : i18n.tr("Great job!")
+            text: noTasksYet ? i18n.tr("No tasks yet!") : i18n.tr("Great job!")
             font.bold: true
         }
 
@@ -108,7 +124,7 @@ PageWithBottomEdge {
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             horizontalAlignment: Text.AlignHCenter
 
-            text: !hasTasks ? i18n.tr("Swipe up from the bottom of the screen to add tasks") : i18n.tr("Nothing to do")
+            text: noTasksYet ? i18n.tr("Swipe up from the bottom of the screen to add tasks") : i18n.tr("Nothing to do")
         }
     }
 
@@ -116,8 +132,28 @@ PageWithBottomEdge {
         flickableItem: listView
     }
 
-    property bool hasTasks: allTasksCount > 0
-    property int allTasksCount: database.query("Task").length
+
+
+    Component {
+        id: renameProjectDialog
+
+        InputDialog {
+            id: dialog
+
+            title: "Rename project"
+            text: "Edit the name of the project:"
+            placeholderText: "Project name"
+
+            value: project.title
+
+            onAccepted: {
+                project.title = value
+                PopupUtils.close(dialog)
+            }
+        }
+    }
+
+    property bool noTasksYet: showCompletedTasks && tasks.count == 0
 
     Query {
         id: tasks

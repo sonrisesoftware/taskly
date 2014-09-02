@@ -53,6 +53,8 @@ Page {
                 type: 'Task'
                 _db: database
                 predicate: "completed==0 AND projectId=='%1'".arg(modelData._id)
+
+                enabled: page.active
             }
         }
     }
