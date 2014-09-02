@@ -23,7 +23,12 @@ PageWithBottomEdge {
 
     property string searchQuery: state == "default" ? "" : searchField.text
 
-    onStateChanged: searchField.text = ""
+    onStateChanged: {
+        if (state == "search") {
+            searchField.text = ""
+            searchField.forceActiveFocus()
+        }
+    }
 
     state: "default"
     states: [
@@ -85,7 +90,7 @@ PageWithBottomEdge {
             contents: TextField {
                 id: searchField
                 placeholderText: "Search..."
-                width: parent ? parent.width - units.gu(2) : undefined
+                width: parent ? parent.width/* - units.gu(2)*/ : undefined
 
                 onTriggered: {
                     searchField.focus = false
