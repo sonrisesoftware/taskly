@@ -21,34 +21,78 @@ PageWithBottomEdge {
 
     property Project project
 
-    head.actions: [
-        Action {
-            iconSource: showCompletedTasks ? "image://theme/select" : Qt.resolvedUrl("../icons/unselect.svg")
-            text: "Show completed"
-            visible: allowShowingCompletedTasks
-            onTriggered: {
-                showCompletedTasks = !showCompletedTasks
-            }
+    property string searchQuery: state == "default" ? "" : searchField.text
+
+    onStateChanged: searchField.text = ""
+
+    state: "default"
+    states: [
+        PageHeadState {
+            name: "default"
+            head: page.head
+            actions: [
+                Action {
+                    iconName: "search"
+                    onTriggered: page.state = "search"
+                },
+
+                // This will show as just a black square because of LP #1364572
+                Action {
+                    iconSource: showCompletedTasks ? "image://theme/select" : Qt.resolvedUrl("../icons/unselect.svg")
+                    text: "Show completed"
+                    visible: allowShowingCompletedTasks
+                    onTriggered: {
+                        showCompletedTasks = !showCompletedTasks
+                    }
+                },
+
+                Action {
+                    iconName: "delete"
+                    text: "Delete project"
+                    visible: project != null
+
+                    onTriggered: {
+                        project.remove()
+                        pageStack.pop()
+                    }
+                },
+
+                Action {
+                    iconName: "edit"
+                    text: "Rename project"
+                    visible: project != null
+                    onTriggered: PopupUtils.open(renameProjectDialog)
+                }
+            ]
         },
-
-        Action {
-            iconName: "delete"
-            text: "Delete project"
-            visible: project != null
-
-            onTriggered: {
-                project.remove()
-                pageStack.pop()
+        PageHeadState {
+            id: headerState
+            name: "search"
+            head: page.head
+            actions: Action {
+                iconName: "search"
+                onTriggered: {
+                    searchField.focus = false
+                    Qt.inputMethod.hide()
+                }
             }
-        },
+            backAction: Action {
+                id: leaveSearchAction
+                text: "back"
+                iconName: "back"
+                onTriggered: page.state = "default"
+            }
+            contents: TextField {
+                id: searchField
+                placeholderText: "Search..."
+                width: parent ? parent.width - units.gu(2) : undefined
 
-        Action {
-            iconName: "edit"
-            text: "Rename project"
-            visible: project != null
-            onTriggered: PopupUtils.open(renameProjectDialog)
+                onTriggered: {
+                    searchField.focus = false
+                    Qt.inputMethod.hide()
+                }
+            }
         }
-
     ]
 
     bottomEdgePageComponent: AddTaskPage {
@@ -95,7 +139,7 @@ PageWithBottomEdge {
         spacing: units.gu(0.5)
 
         Icon {
-            name: noTasksYet ? "add" : "ok"
+            name: page.searchQuery ? "search" : noTasksYet ? "add" : "ok"
             opacity: 0.5
             width: units.gu(10)
             height: width
@@ -112,7 +156,7 @@ PageWithBottomEdge {
             anchors.horizontalCenter: parent.horizontalCenter
             opacity: 0.5
 
-            text: noTasksYet ? i18n.tr("No tasks yet!") : i18n.tr("Great job!")
+            text: page.searchQuery ? i18n.tr("No matching tasks!") : noTasksYet ? i18n.tr("No tasks yet!") : i18n.tr("Great job!")
             font.bold: true
         }
 
@@ -124,7 +168,8 @@ PageWithBottomEdge {
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             horizontalAlignment: Text.AlignHCenter
 
-            text: noTasksYet ? i18n.tr("Swipe up from the bottom of the screen to add tasks") : i18n.tr("Nothing to do")
+            text: page.searchQuery ? i18n.tr("No tasks match your search query") : noTasksYet ? i18n.tr("Swipe up from the bottom of the screen to add tasks") : i18n.tr("Nothing to do")
+
         }
     }
 
@@ -159,7 +204,25 @@ PageWithBottomEdge {
         id: tasks
         type: "Task"
         groupBy: "section"
-        predicate: showCompletedTasks ? page.predicate : "completed==0" + (page.predicate ? " AND " + page.predicate : "")
+        predicate: {
+            var predicate = []
+
+            if (page.predicate)
+                predicate.push('(' + page.predicate + ')')
+
+            if (page.searchQuery) {
+                var query = page.searchQuery
+                query = query.replace('_', '\\_').replace('%', '\\%')
+                predicate.push("(UPPER(title) LIKE UPPER('%%1%') ESCAPE '\\')".arg(query))
+            }
+
+            if (!showCompletedTasks)
+                predicate.push('(completed == 0)')
+
+            print(predicate.join(" AND "))
+
+            return predicate.join(" AND ")
+        }
         sortBy: "completed,dueDate,title"
         _db: database
     }
