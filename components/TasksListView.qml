@@ -6,6 +6,8 @@ UbuntuListView {
     id: listView
     clip: true
 
+    StateSaver.properties: "contentY"
+
     header: ListItem.ThinDivider {
         visible: listView.contentY < units.dp(-5)
     }

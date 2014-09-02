@@ -8,6 +8,8 @@ import "udata"
 import "model"
 
 MainView {
+    id: app
+
     // objectName for functional testing purposes (autopilot-qt5)
     objectName: "mainView"
 
@@ -18,7 +20,7 @@ MainView {
      This property enables the application to change orientation
      when the device is rotated. The default is false.
     */
-    //automaticOrientation: true
+    automaticOrientation: true
 
     width: units.gu(45)
     height: units.gu(75)
@@ -33,10 +35,16 @@ MainView {
         Tabs {
             id: tabs
 
+            StateSaver.properties: "selectedTabIndex"
+
             Tab {
+                id: upcomingTab
+
                 objectName: "upcomingTab"
                 title: page.title
                 page: TasksPage {
+                    id: upcomingPage
+
                     title: "Upcoming"
                     predicate: "dueDate != 'null'"
                     allowShowingCompletedTasks: false
@@ -44,9 +52,12 @@ MainView {
             }
 
             Tab {
+                id: inboxTab
+
                 objectName: "inboxTab"
                 title: page.title
                 page: TasksPage {
+                    id: inboxPage
                     title: "Inbox"
 
                     // The Inbox page only shows tasks not associated with any project
@@ -55,9 +66,12 @@ MainView {
             }
 
             Tab {
+                id: projectsTab
+
                 objectName: "projectsPage"
                 title: page.title
                 page: ProjectsPage {
+                    id: projectsPage
                 }
             }
         }

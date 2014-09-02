@@ -41,6 +41,8 @@ Page {
         id: listView
         anchors.fill: parent
 
+        StateSaver.properties: "contentY"
+
         model: projects
         delegate: SubtitledListItem {
             text: modelData.title
