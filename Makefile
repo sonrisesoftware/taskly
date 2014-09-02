@@ -18,7 +18,7 @@ check:
 	qmltestrunner -input tests/unit
 
 run:
-	/usr/bin/qmlscene $@ tasks-reboot-app.qml
+	/usr/bin/qmlscene $@ main.qml
 
 erase_db:
 	rm ~/.local/share/com.ubuntu.developer.mdspencer.taskly/Databases/*.sqlite
