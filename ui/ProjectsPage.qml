@@ -37,6 +37,8 @@ Page {
         }
     }
 
+    flickable: projects.count == 0 ? null : listView
+
     UbuntuListView {
         id: listView
         anchors.fill: parent
@@ -47,7 +49,9 @@ Page {
         delegate: SubtitledListItem {
             text: modelData.title
             subText: tasksCount.count == 1 ? "1 task" : "%1 tasks".arg(tasksCount.count)
-            onClicked: pageStack.push(Qt.resolvedUrl("TasksPage.qml"), {project: modelData})
+            onClicked: pageStack.push(Qt.resolvedUrl("TasksPage.qml"), {
+                                          project: modelData
+                                      })
 
             QueryCount {
                 id: tasksCount
@@ -65,11 +69,41 @@ Page {
         flickableItem: listView
     }
 
-    Label {
+    Column {
         anchors.centerIn: parent
-        text: i18n.tr("No projects")
-        fontSize: "large"
         visible: projects.count == 0
+        spacing: units.gu(0.5)
+
+        Icon {
+            name: "browser-tabs"
+            opacity: 0.5
+            width: units.gu(10)
+            height: width
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
+
+        Item {
+            width: parent.width
+            height: units.gu(2)
+        }
+
+        Label {
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: i18n.tr("No projects")
+            opacity: 0.5
+            fontSize: "large"
+            font.bold: true
+        }
+
+        Label {
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: i18n.tr("Tap the Add icon in the toolbar to add a project")
+            width: page.width - units.gu(8)
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+            horizontalAlignment: Text.AlignHCenter
+            opacity: 0.5
+            fontSize: "large"
+        }
     }
 
     Query {

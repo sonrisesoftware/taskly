@@ -13,9 +13,9 @@ PageWithBottomEdge {
     id: page
     title: project ? project.title : "Tasks"
 
-    property bool showCompletedTasks: false
-
-    property string predicate: project ? "projectId == '%1'".arg(project._id) : ""
+    property bool upcomingOnly
+    property bool showCompletedTasks
+    property bool showAllProjects
 
     property bool allowShowingCompletedTasks: true
 
@@ -43,18 +43,22 @@ PageWithBottomEdge {
 
                 // This will show as just a black square because of LP #1364572
                 Action {
-                    iconSource: showCompletedTasks ? "image://theme/select" : Qt.resolvedUrl("../icons/unselect.svg")
+                    iconName: "select"
                     text: "Show completed"
-                    visible: allowShowingCompletedTasks
+                    visible: allowShowingCompletedTasks && !showCompletedTasks
                     onTriggered: {
-                        showCompletedTasks = !showCompletedTasks
+                        pageStack.push(Qt.resolvedUrl("TasksPage.qml"), {
+                                           upcomingOnly: upcomingOnly,
+                                           showAllProjects: showAllProjects,
+                                           project: project, showCompletedTasks: true
+                                       })
                     }
                 },
 
                 Action {
                     iconName: "delete"
                     text: "Delete project"
-                    visible: project != null
+                    visible: project != null && !showCompletedTasks
 
                     onTriggered: {
                         project.remove()
@@ -65,7 +69,7 @@ PageWithBottomEdge {
                 Action {
                     iconName: "edit"
                     text: "Rename project"
-                    visible: project != null
+                    visible: project != null && !showCompletedTasks
                     onTriggered: PopupUtils.open(renameProjectDialog)
                 }
             ]
@@ -99,6 +103,8 @@ PageWithBottomEdge {
             }
         }
     ]
+
+    bottomEdgeEnabled: !showCompletedTasks
 
     bottomEdgePageComponent: AddTaskPage {
         project: page.project
@@ -144,7 +150,8 @@ PageWithBottomEdge {
         spacing: units.gu(0.5)
 
         Icon {
-            name: page.searchQuery ? "search" : noTasksYet ? "add" : "ok"
+            name: page.searchQuery ? "search"
+                                   : noTasksYet ? "add" : upcomingOnly ? "reminder" : "ok"
             opacity: 0.5
             width: units.gu(10)
             height: width
@@ -161,7 +168,10 @@ PageWithBottomEdge {
             anchors.horizontalCenter: parent.horizontalCenter
             opacity: 0.5
 
-            text: page.searchQuery ? i18n.tr("No matching tasks!") : noTasksYet ? i18n.tr("No tasks yet!") : i18n.tr("Great job!")
+            text: page.searchQuery ? i18n.tr("No matching tasks")
+                                   : noTasksYet ? i18n.tr("No tasks yet!")
+                                                : upcomingOnly || !showCompletedTasks ? i18n.tr("Great job!")
+                                                                                      : i18n.tr("Nothing completed")
             font.bold: true
         }
 
@@ -173,7 +183,11 @@ PageWithBottomEdge {
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             horizontalAlignment: Text.AlignHCenter
 
-            text: page.searchQuery ? i18n.tr("No tasks match your search query") : noTasksYet ? i18n.tr("Swipe up from the bottom of the screen to add tasks") : i18n.tr("Nothing to do")
+            text: page.searchQuery ? i18n.tr("No tasks match your search query")
+                                   : noTasksYet ? i18n.tr("Swipe up from the bottom of the screen to add tasks")
+                                                : upcomingOnly ? i18n.tr("No upcoming tasks")
+                                                               : showCompletedTasks ? i18n.tr("You haven't finished any tasks yet")
+                                                                                    : i18n.tr("Nothing to do")
 
         }
     }
@@ -203,7 +217,24 @@ PageWithBottomEdge {
         }
     }
 
-    property bool noTasksYet: showCompletedTasks && tasks.count == 0
+    property bool noTasksYet: allTasks.count == 0
+
+    QueryCount {
+        id: allTasks
+        _db: database
+        enabled: page.active
+        type: 'Task'
+        predicate: {
+            var predicate = []
+
+            if (!showAllProjects)
+                predicate.push("projectId == '%1'".arg(project ? project._id : ''))
+
+            print(predicate.join(" AND "))
+
+            return predicate.join(" AND ")
+        }
+    }
 
     Query {
         id: tasks
@@ -212,8 +243,12 @@ PageWithBottomEdge {
         predicate: {
             var predicate = []
 
-            if (page.predicate)
-                predicate.push('(' + page.predicate + ')')
+            if (upcomingOnly) {
+                predicate.push("dueDate != 'null'")
+            }
+
+            if (!showAllProjects)
+                predicate.push("projectId == '%1'".arg(project ? project._id : ''))
 
             if (page.searchQuery) {
                 var query = page.searchQuery
@@ -221,8 +256,7 @@ PageWithBottomEdge {
                 predicate.push("(UPPER(title) LIKE UPPER('%%1%') ESCAPE '\\')".arg(query))
             }
 
-            if (!showCompletedTasks)
-                predicate.push('(completed == 0)')
+            predicate.push('(completed == %1)'.arg(showCompletedTasks ? '1' : '0'))
 
             print(predicate.join(" AND "))
 

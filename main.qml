@@ -46,7 +46,8 @@ MainView {
                     id: upcomingPage
 
                     title: "Upcoming"
-                    predicate: "dueDate != 'null'"
+                    upcomingOnly: true
+                    showAllProjects: true
                     allowShowingCompletedTasks: false
                 }
             }
@@ -61,7 +62,7 @@ MainView {
                     title: "Inbox"
 
                     // The Inbox page only shows tasks not associated with any project
-                    predicate: "projectId==''"
+                    showAllProjects: false
                 }
             }
 
