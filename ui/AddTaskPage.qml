@@ -113,7 +113,7 @@ Page {
                 width: parent.width
                 text: "Remove due date"
                 enabled: DateUtils.isValid(date)
-                color: "#d9534f"
+                color: colors["red"]
                 onTriggered: {
                     date = new Date("")
                     PopupUtils.close(dialog)

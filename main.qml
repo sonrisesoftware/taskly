@@ -6,6 +6,7 @@ import "qml-extras"
 import "udata"
 
 import "model"
+import "ubuntu-ui-extras"
 
 MainView {
     id: app
@@ -22,8 +23,9 @@ MainView {
     */
     automaticOrientation: true
 
-    width: units.gu(45)
-    height: units.gu(75)
+    // The size of the Nexus 4
+    width: units.gu(42)
+    height: units.gu(67)
 
     useDeprecatedToolbar: false
 
@@ -75,7 +77,36 @@ MainView {
                     id: projectsPage
                 }
             }
+
+            Tab {
+                title: page.title
+                page: AboutPage {
+                    linkColor: colors["blue"]
+
+                    appName: i18n.tr("Taskly")
+                    icon: Qt.resolvedUrl("taskly.png")
+                    version: "@APP_VERSION@"
+
+                    website: "http://www.sonrisesoftware.com/apps/taskly"
+                    reportABug: "https://github.com/sonrisesoftware/taskly/issues"
+
+                    copyright: i18n.tr("Copyright (c) 2014 Michael Spencer")
+                    author: "Sonrise Software"
+                    contactEmail: "sonrisesoftware@gmail.com"
+                }
+            }
         }
+    }
+
+    property var colors: {
+        "green": "#5cb85c",
+        "red": "#d9534f",
+        "yellow": "#f0ad4e",
+        "blue": "#428bca",
+        "orange": UbuntuColors.orange,
+        "default": Theme.palette.normal.baseText,
+        "white": "#F5F5F5",
+        "overlay": "#666"
     }
 
     Database {
