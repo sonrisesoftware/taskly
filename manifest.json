@@ -1,15 +1,15 @@
 {
     "architecture": "all",
-    "description": "description of tasks-reboot-app",
-    "framework": "ubuntu-sdk-14.10-dev2",
+    "description": "A powerful tasks app",
+    "framework": "ubuntu-sdk-14.10-qml-dev3",
     "hooks": {
-        "ubuntu-tasks": {
-            "apparmor": "ubuntu-tasks.json",
-            "desktop": "ubuntu-tasks.desktop"
+        "taskly": {
+            "apparmor": "taskly.json",
+            "desktop": "taskly.desktop"
         }
     },
     "maintainer": "Sonrise Software",
-    "name": "com.ubuntu.developer.mdspencer.tasks-reboot-app",
-    "title": "tasks-reboot-app",
+    "name": "com.ubuntu.developer.mdspencer.taskly",
+    "title": "Taskly",
     "version": "0.1"
 }
