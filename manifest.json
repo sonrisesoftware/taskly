@@ -11,5 +11,5 @@
     "maintainer": "Sonrise Software",
     "name": "com.ubuntu.developer.mdspencer.taskly",
     "title": "Taskly",
-    "version": "0.1"
+    "version": "@APP_VERSION@"
 }

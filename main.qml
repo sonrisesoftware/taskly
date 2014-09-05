@@ -41,7 +41,7 @@ MainView {
     */
     automaticOrientation: true
 
-    anchorToKeyboard: true
+    anchorToKeyboard: height > units.gu(120)
 
     // The size of the Nexus 4
     width: units.gu(42)
@@ -100,20 +100,7 @@ MainView {
 
             Tab {
                 title: page.title
-                page: AboutPage {
-                    linkColor: colors["blue"]
-
-                    appName: i18n.tr("Taskly")
-                    icon: Qt.resolvedUrl("taskly.png")
-                    version: "@APP_VERSION@"
-
-                    website: "http://www.sonrisesoftware.com/apps/taskly"
-                    reportABug: "https://github.com/sonrisesoftware/taskly/issues"
-
-                    copyright: i18n.tr("Copyright (c) 2014 Michael Spencer")
-                    author: "Sonrise Software"
-                    contactEmail: "sonrisesoftware@gmail.com"
-                }
+                page: AboutTasklyPage {}
             }
         }
     }

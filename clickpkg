@@ -1,10 +1,13 @@
 VERSION=$1
 RELEASE_DIR=../releases/taskly/v$VERSION
 
+sudo rm $RELEASE_DIR -r
+
 cp . $RELEASE_DIR -r
 cd $RELEASE_DIR
 replace '@APP_VERSION@' $VERSION manifest.json
 replace '@APP_VERSION@' $VERSION ui/AboutPage.qml
 
+cd ..
 click build v$VERSION
 
