@@ -138,10 +138,12 @@ Page {
 
         ListItem.SingleValue {
             text: i18n.tr("Project")
-            value: colorize(project ? project.title : i18n.tr("Inbox"), UbuntuColors.midAubergine)
+            value: colorize(projectName, UbuntuColors.midAubergine)
             progression: true
 
-            onClicked: pageStack.push(selectProjectPage)
+            property string projectName: page.project ? page.project.title: i18n.tr("Inbox")
+
+            onClicked: pageStack.push(selectProjectPage, {selectedProjectId: project ? project._id : ""})
 
             showDivider: false
         }
@@ -189,8 +191,7 @@ Page {
 
         SelectProjectPage {
             onAccepted: {
-                print("Accepted", project)
-                page.project = project
+                page.project = database.loadById("Project", projectId, page)
             }
         }
     }

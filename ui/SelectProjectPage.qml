@@ -44,15 +44,15 @@ Page {
             text: "Select project"
             onTriggered: {
                 pageStack.pop()
-                accepted(selectedProject)
+                accepted(selectedProjectId)
             }
         }
     ]
 
-    signal accepted(var project)
+    signal accepted(var projectId)
     signal rejected()
 
-    property Project selectedProject
+    property string selectedProjectId
 
     UbuntuListView {
         id: listView
@@ -66,8 +66,8 @@ Page {
             ListItem.Standard {
                 id: inboxItem
                 text: i18n.tr("Inbox")
-                onClicked: selectedProject = null
-                selected: !selectedProject
+                onClicked: selectedProjectId = ""
+                selected: selectedProjectId == ""
 
                 Icon {
                     name: "tick"
@@ -90,8 +90,8 @@ Page {
         delegate: ListItem.Standard {
             id: listItem
             text: modelData.title
-            onClicked: selectedProject = modelData
-            selected: selectedProject == modelData
+            onClicked: selectedProjectId = modelData._id
+            selected: selectedProjectId == modelData._id
 
             Icon {
                 name: "tick"
