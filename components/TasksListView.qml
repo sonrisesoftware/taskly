@@ -26,10 +26,6 @@ UbuntuListView {
 
     StateSaver.properties: "contentY"
 
-    header: ListItem.ThinDivider {
-        visible: listView.contentY < units.dp(-5)
-    }
-
     move: Transition {
         UbuntuNumberAnimation { properties: "x,y"; duration: UbuntuAnimation.SlowDuration }
     }

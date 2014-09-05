@@ -98,14 +98,28 @@ Page {
         }
     }
 
+
+    Rectangle {
+        anchors.fill: footer
+        color: Qt.rgba(0,0,0,0.03)
+    }
+
     Column {
+        id: footer
         anchors {
             left: parent.left
             right: parent.right
             bottom: parent.bottom
         }
 
-        ListItem.ThinDivider {}
+        ListItem.ThinDivider {
+            anchors {
+                left: parent.left
+                right: parent.right
+                leftMargin: units.gu(0)
+                rightMargin: units.gu(0)
+            }
+        }
 
         ListItem.SingleValue {
             text: DateUtils.isValid(date) ? "Change due date" : "Add due date"

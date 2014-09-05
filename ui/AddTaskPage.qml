@@ -107,6 +107,11 @@ Page {
         }
     }
 
+    Rectangle {
+        anchors.fill: footer
+        color: Qt.rgba(0,0,0,0.03)
+    }
+
     Column {
         id: footer
 
@@ -116,14 +121,37 @@ Page {
             bottom: parent.bottom
         }
 
-        ListItem.ThinDivider {}
+
+
+        ListItem.ThinDivider {
+            anchors {
+                left: parent.left
+                right: parent.right
+                leftMargin: units.gu(0)
+                rightMargin: units.gu(0)
+            }
+        }
 
         ListItem.SingleValue {
             text: checklist ? i18n.tr("Checklist") : i18n.tr("Add checklist")
             value: checklist ? checklist.join(", ") : ""
             progression: true
+            showDivider: false
 
-            onClicked: checklist = ["A", "B"]
+            ListItem.ThinDivider {
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    leftMargin: units.gu(-2)
+                    rightMargin: units.gu(-6)
+                    bottom: parent.bottom
+                }
+            }
+
+            onClicked: checklist = [
+                           {text: "A", completed: false},
+                           {text: "B", completed: true}
+                       ]
 
         }
 
@@ -132,6 +160,17 @@ Page {
             value: colorize(date.toDateString(), UbuntuColors.midAubergine)
 
             progression: true
+            showDivider: false
+
+            ListItem.ThinDivider {
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    leftMargin: units.gu(-2)
+                    rightMargin: units.gu(-6)
+                    bottom: parent.bottom
+                }
+            }
 
             onClicked: PopupUtils.open(dateDialog)
         }

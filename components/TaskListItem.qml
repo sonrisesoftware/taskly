@@ -23,7 +23,7 @@ import Ubuntu.Components.Themes.Ambiance 1.0
 import "../ui"
 
 ListItem.Empty {
-    id: root
+    id: listItem
 
     property alias checked: doneCheckBox.checked
     property alias text: titleLabel.text
@@ -34,6 +34,9 @@ ListItem.Empty {
 
     CheckBox {
         id: doneCheckBox
+
+        height: listItem.height > units.gu(5) ? implicitHeight : listItem.height - units.gu(1)
+        width: height
 
         anchors {
             verticalCenter: parent.verticalCenter
@@ -49,6 +52,7 @@ ListItem.Empty {
 
         anchors {
             verticalCenter: parent.verticalCenter
+            verticalCenterOffset: subText ? -units.dp(2) : 0
             left: doneCheckBox.visible ? doneCheckBox.right : parent.left
             leftMargin: doneCheckBox.visible ? units.gu(1) : units.gu(2)
             rightMargin: units.gu(2)

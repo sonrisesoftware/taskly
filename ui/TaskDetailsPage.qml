@@ -22,6 +22,7 @@ import Ubuntu.Components.Popups 1.0
 import Ubuntu.Components.ListItems 1.0 as ListItem
 
 import "../model"
+import "../components"
 
 Page {
     id: root
@@ -52,30 +53,49 @@ Page {
 
     Column {
         anchors.fill: parent
-        anchors.margins: units.gu(2)
-        spacing: units.gu(1)
+        anchors.topMargin: units.gu(2)
 
-        Label {
-            text: task.hasDueDate ? i18n.tr("Due %1").arg(task.dueDateString) : ""
-            color: UbuntuColors.midAubergine
+        Column {
+            anchors {
+                left: parent.left
+                right: parent.right
+
+                margins: units.gu(2)
+            }
+            spacing: units.gu(1)
+
+            Label {
+                text: task.hasDueDate ? i18n.tr("Due %1").arg(task.dueDateString) : ""
+                color: UbuntuColors.midAubergine
+            }
+
+            Label {
+                width: parent.width
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+
+                text: task.description ? task.description : i18n.tr("No description")
+                color: task.description ? Theme.palette.selected.backgroundText : Theme.palette.normal.backgroundText
+            }
         }
 
-        Label {
+        Item {
             width: parent.width
-            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-
-            text: task.description ? task.description : i18n.tr("No description")
-            color: task.description ? Theme.palette.selected.backgroundText : Theme.palette.normal.backgroundText
+            height: units.gu(2)
         }
 
-        Label {
-            text: task.hasChecklist ? "Checklist" : ""
+        ListItem.Header {
+            text: i18n.tr("Checklist")
+            visible: task.hasChecklist
         }
 
         Repeater {
             model: task.checklist
-            delegate: Label {
-                text: " * " + modelData
+            delegate: TaskListItem {
+                text: modelData.text
+                checked: modelData.completed
+                //showDivider: false
+                opacity: 1
+                height: units.gu(5)
             }
         }
     }
