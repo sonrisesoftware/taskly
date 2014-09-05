@@ -1,0 +1,10 @@
+VERSION=$1
+RELEASE_DIR=../releases/taskly/v$VERSION
+
+cp . $RELEASE_DIR -r
+cd $RELEASE_DIR
+replace '@APP_VERSION@' $VERSION manifest.json
+replace '@APP_VERSION@' $VERSION ui/AboutPage.qml
+
+click build v$VERSION
+

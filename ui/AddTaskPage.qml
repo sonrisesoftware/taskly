@@ -27,10 +27,12 @@ import "../qml-extras/dateutils.js" as DateUtils
 import "../ubuntu-ui-extras"
 
 Page {
+    id: page
     title: "Add Task"
 
     property Project project
     property date date
+    property var checklist
 
     head.backAction: Action {
         iconName: "close"
@@ -47,7 +49,8 @@ Page {
                                     title: titleField.text,
                                     description: descriptionField.text,
                                     dueDate: date,
-                                    projectId: project ? project._id : ""
+                                    projectId: project ? project._id : "",
+                                    checklist: checklist
                                 }, tasks)
                 pageStack.pop()
             }
@@ -55,7 +58,13 @@ Page {
     ]
 
     Column {
-        anchors.fill: parent
+        anchors {
+            left: parent.left
+            right: parent.right
+            top: parent.top
+            bottom: footer.top
+        }
+
         anchors.margins: units.gu(2)
 
         spacing: units.gu(1)
@@ -87,13 +96,20 @@ Page {
 
             placeholderText: "Description"
 
-            // Expand up to 15 lines, always showing at least 5 lines
-            property int lines: Math.min(Math.max(descriptionField.lineCount, 5), 15)
-            height: lines * (descriptionField.font.pixelSize + units.dp(2)) + 2 * descriptionField.__styleInstance.frameSpacing
+            // Always showing at least 5 lines
+            property int lines: Math.max(descriptionField.lineCount, 5)
+
+            property int maxHeight: parent.height
+                                    - titleField.height
+                                    - parent.spacing * (parent.children.length - 1)
+
+            height: Math.min(maxHeight, lines * (descriptionField.font.pixelSize + units.dp(2)) + 2 * descriptionField.__styleInstance.frameSpacing)
         }
     }
 
     Column {
+        id: footer
+
         anchors {
             left: parent.left
             right: parent.right
@@ -103,12 +119,29 @@ Page {
         ListItem.ThinDivider {}
 
         ListItem.SingleValue {
+            text: checklist ? i18n.tr("Checklist") : i18n.tr("Add checklist")
+            value: checklist ? checklist.join(", ") : ""
+            progression: true
+
+            onClicked: checklist = ["A", "B"]
+
+        }
+
+        ListItem.SingleValue {
             text: DateUtils.isValid(date) ? "Change due date" : "Add due date"
-            value: "<font color=\"%1\">%2</font>".arg(UbuntuColors.midAubergine).arg(date.toDateString())
+            value: colorize(date.toDateString(), UbuntuColors.midAubergine)
 
             progression: true
 
             onClicked: PopupUtils.open(dateDialog)
+        }
+
+        ListItem.SingleValue {
+            text: i18n.tr("Project")
+            value: colorize(project ? project.title : i18n.tr("Inbox"), UbuntuColors.midAubergine)
+            progression: true
+
+            onClicked: pageStack.push(selectProjectPage)
 
             showDivider: false
         }
@@ -147,6 +180,17 @@ Page {
                 onRejected: {
                     PopupUtils.close(dialog)
                 }
+            }
+        }
+    }
+
+    Component {
+        id: selectProjectPage
+
+        SelectProjectPage {
+            onAccepted: {
+                print("Accepted", project)
+                page.project = project
             }
         }
     }

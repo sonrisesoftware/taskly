@@ -41,6 +41,8 @@ MainView {
     */
     automaticOrientation: true
 
+    anchorToKeyboard: true
+
     // The size of the Nexus 4
     width: units.gu(42)
     height: units.gu(67)
@@ -127,10 +129,14 @@ MainView {
         "overlay": "#666"
     }
 
+    function colorize(text, color) {
+        return "<font color=\"%1\">%2</font>".arg(color).arg(text)
+    }
+
     Database {
         id: database
 
-        version: 2
+        version: 3
         name: "taskly"
         description: "Taskly for Ubuntu Touch"
         modelPath: Qt.resolvedUrl("model")
@@ -138,6 +144,11 @@ MainView {
         onUpgrade: {
             if (version < 2) {
                 tx.executeSql("ALTER TABLE Task ADD projectId TEXT");
+            }
+
+            if (version < 3) {
+                print("Adding checklist column")
+                tx.executeSql("ALTER TABLE Task ADD checklist TEXT");
             }
         }
     }

@@ -67,5 +67,16 @@ Page {
             text: task.description ? task.description : i18n.tr("No description")
             color: task.description ? Theme.palette.selected.backgroundText : Theme.palette.normal.backgroundText
         }
+
+        Label {
+            text: task.hasChecklist ? "Checklist" : ""
+        }
+
+        Repeater {
+            model: task.checklist
+            delegate: Label {
+                text: " * " + modelData
+            }
+        }
     }
 }

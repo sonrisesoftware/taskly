@@ -25,13 +25,14 @@ Document {
     id: task
     _type: "Task"
 
-    _properties: ["title", "description", "completed", "dueDate", "projectId"]
+    _properties: ["title", "description", "completed", "dueDate", "projectId", "checklist"]
 
     property string title
     property string description
     property bool completed: false
     property date dueDate
     property string projectId
+    property var checklist
 
     property bool hasDueDate: DateUtils.isValid(dueDate)
 
@@ -43,6 +44,8 @@ Document {
             return ""
         }
     }
+
+    property bool hasChecklist: checklist != undefined
 
     property string section: {
         print("Updating sections")
