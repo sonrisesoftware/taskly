@@ -109,7 +109,7 @@ Page {
 
     Rectangle {
         anchors.fill: footer
-        color: Qt.rgba(0,0,0,0.03)
+        color: Qt.rgba(1,1,1,0.7)
     }
 
     Column {
@@ -119,9 +119,16 @@ Page {
             left: parent.left
             right: parent.right
             bottom: parent.bottom
+            bottomMargin: page.active ? 0 : -footer.height
+
+            Behavior on bottomMargin {
+                UbuntuNumberAnimation {
+                    easing.type: Easing.InOutQuad
+
+                    duration: UbuntuAnimation.SlowDuration
+                }
+            }
         }
-
-
 
         ListItem.ThinDivider {
             anchors {

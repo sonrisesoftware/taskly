@@ -42,6 +42,12 @@ Page {
 
     Component.onCompleted: date = task.dueDate
 
+    Timer {
+        interval: 10
+        running: true
+        onTriggered: showFooterAnimation.start()
+    }
+
     head.actions: [
         Action {
             iconName: "ok"
@@ -101,7 +107,17 @@ Page {
 
     Rectangle {
         anchors.fill: footer
-        color: Qt.rgba(0,0,0,0.03)
+        color: Qt.rgba(1,1,1,0.7)
+    }
+
+    UbuntuNumberAnimation {
+        id: showFooterAnimation
+        target: footer.anchors
+        property: "bottomMargin"
+        to: 0
+        easing.type: Easing.InOutQuad
+
+        duration: UbuntuAnimation.SlowDuration
     }
 
     Column {
@@ -110,6 +126,7 @@ Page {
             left: parent.left
             right: parent.right
             bottom: parent.bottom
+            bottomMargin: -footer.height
         }
 
         ListItem.ThinDivider {
