@@ -25,14 +25,34 @@ Document {
     id: task
     _type: "Task"
 
-    _properties: ["title", "description", "completed", "dueDate", "projectId", "checklist"]
+    _properties: [
+        "title",
+        "description",
+        "completed",
+        "dueDate",
+        "projectId",
+        "checklist",
+        "priority"
+    ]
 
     property string title
+
+    onLoaded: {
+        print("Initializing priority...")
+        priority = title.indexOf("!") != -1 ? 0 : 1
+    }
+
+    // High priority if the title ends with "!", example: "Do this NOW!"
+    onTitleChanged: {
+        priority = title.indexOf("!") != -1 ? 0 : 1
+    }
+
     property string description
     property bool completed: false
     property date dueDate
     property string projectId
     property var checklist
+    property int priority
 
     property bool hasDueDate: DateUtils.isValid(dueDate)
 

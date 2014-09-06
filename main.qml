@@ -123,7 +123,7 @@ MainView {
     Database {
         id: database
 
-        version: 3
+        version: 4
         name: "taskly"
         description: "Taskly for Ubuntu Touch"
         modelPath: Qt.resolvedUrl("model")
@@ -136,6 +136,11 @@ MainView {
             if (version < 3) {
                 print("Adding checklist column")
                 tx.executeSql("ALTER TABLE Task ADD checklist TEXT");
+            }
+
+            if (version < 4) {
+                print("Adding priority column")
+                tx.executeSql("ALTER TABLE Task ADD priority TEXT DEFAULT(0)");
             }
         }
     }
