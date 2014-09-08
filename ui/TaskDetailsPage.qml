@@ -37,7 +37,7 @@ Page {
             text: "Edit task"
 
             onTriggered: {
-                pageStack.push(Qt.resolvedUrl("EditTaskPage.qml"), {task: task})
+                pageStack.push(Qt.resolvedUrl("AddTaskPage.qml"), {task: task})
             }
         },
 
@@ -97,6 +97,12 @@ Page {
                 opacity: 1
                 height: units.gu(5)
             }
+        }
+
+        ListItem.Standard {
+            text: "<i>Add checklist item...</i>"
+            visible: task.hasChecklist
+            height: units.gu(5)
         }
     }
 }

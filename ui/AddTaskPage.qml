@@ -28,11 +28,25 @@ import "../ubuntu-ui-extras"
 
 Page {
     id: page
-    title: "Add Task"
+    title: task == null ? i18n.tr("Add Task") : i18n.tr("Edit Task")
 
     property Project project
     property date date
     property var checklist
+
+    property Task task
+
+    Component.onCompleted: {
+        if (task != null) {
+            date = task.dueDate
+            checklist = task.checklist
+        }
+    }
+
+    onActiveChanged: {
+        if (active)
+            timer.start()
+    }
 
     head.backAction: Action {
         iconName: "close"
@@ -42,16 +56,25 @@ Page {
     head.actions: [
         Action {
             iconName: "ok"
-            text: "Add task"
+            text: task == null ? i18n.tr("Add task") : i18n.tr("Save task")
             enabled: titleField.acceptableInput
             onTriggered: {
-                database.create("Task", {
-                                    title: titleField.text,
-                                    description: descriptionField.text,
-                                    dueDate: date,
-                                    projectId: project ? project._id : "",
-                                    checklist: checklist
-                                }, tasks)
+                if (task == null) {
+                    database.create("Task", {
+                                        title: titleField.text,
+                                        description: descriptionField.text,
+                                        dueDate: date,
+                                        projectId: project ? project._id : "",
+                                        checklist: checklist
+                                    }, tasks)
+                } else {
+                    task.title = titleField.text
+                    task.description = descriptionField.text
+                    task.dueDate = date
+                    task.projectId = project ? project._id : ""
+                    task.checklist = checklist
+                }
+
                 pageStack.pop()
             }
         }
@@ -81,6 +104,7 @@ Page {
                 regExp: /.+/
             }
 
+            text: task ? task.title : ""
             placeholderText: "Title"
 
             Keys.onTabPressed: descriptionField.forceActiveFocus()
@@ -94,6 +118,7 @@ Page {
                 right: parent.right
             }
 
+            text: task ? task.description : ""
             placeholderText: "Description"
 
             // Always showing at least 5 lines
@@ -112,6 +137,16 @@ Page {
         color: Qt.rgba(1,1,1,0.7)
     }
 
+    UbuntuNumberAnimation {
+        id: showFooterAnimation
+        target: footer.anchors
+        property: "bottomMargin"
+        to: 0
+        easing.type: Easing.InOutQuad
+
+        duration: UbuntuAnimation.SlowDuration
+    }
+
     Column {
         id: footer
 
@@ -119,15 +154,7 @@ Page {
             left: parent.left
             right: parent.right
             bottom: parent.bottom
-            bottomMargin: page.active ? 0 : -footer.height
-
-            Behavior on bottomMargin {
-                UbuntuNumberAnimation {
-                    easing.type: Easing.InOutQuad
-
-                    duration: UbuntuAnimation.SlowDuration
-                }
-            }
+            bottomMargin: -footer.height
         }
 
         ListItem.ThinDivider {
@@ -240,5 +267,12 @@ Page {
                 page.project = database.loadById("Project", projectId, page)
             }
         }
+    }
+
+    Timer {
+        id: timer
+
+        interval: 10
+        onTriggered: showFooterAnimation.start()
     }
 }

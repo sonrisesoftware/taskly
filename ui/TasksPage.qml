@@ -137,29 +137,6 @@ PageWithBottomEdge {
 
         anchors.fill: parent
         model: tasks
-
-        section.property: "section"
-        section.delegate: ListItem.Header {
-            text: section
-        }
-
-        delegate: TaskListItem {
-            id: listItem
-
-            checked: modelData.completed
-            text: formatText(modelData.title)
-            subText: modelData.dueDateString
-
-            onCheckedChanged: {
-                modelData.completed = checked
-                if (modelData)
-                    checked = Qt.binding(function() { return modelData.completed })
-            }
-
-            onClicked: {
-                pageStack.push(Qt.resolvedUrl("TaskDetailsPage.qml"), {task: modelData})
-            }
-        }
     }
 
     Column {

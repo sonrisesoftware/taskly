@@ -77,6 +77,8 @@ Document {
             return i18n.tr("Overdue")
         else if (DateUtils.isToday(dueDate))
             return i18n.tr("Today")
+        else if (DateUtils.isTomorrow(dueDate))
+            return i18n.tr("Tomorrow")
         else if (DateUtils.isThisWeek(dueDate))
             return i18n.tr("This Week")
         else
