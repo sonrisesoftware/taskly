@@ -66,7 +66,7 @@ PageWithBottomEdge {
                 Action {
                     iconName: "delete"
                     text: "Delete project"
-                    visible: project != null && !showCompletedTasks
+                    visible: project != null
 
                     onTriggered: {
                         project.remove()
@@ -77,7 +77,7 @@ PageWithBottomEdge {
                 Action {
                     iconName: "edit"
                     text: "Rename project"
-                    visible: project != null && !showCompletedTasks
+                    visible: project != null
                     onTriggered: PopupUtils.open(renameProjectDialog)
                 }
             ]

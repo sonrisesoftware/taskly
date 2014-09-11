@@ -53,7 +53,7 @@ UbuntuListView {
         }
 
         onClicked: {
-            pageStack.push(Qt.resolvedUrl("../ui/TaskDetailsPage.qml"), {task: modelData})
+            pageStack.push(Qt.resolvedUrl("../ui/TaskDetailsPage.qml"), {task: modelData, project: project})
         }
     }
 }

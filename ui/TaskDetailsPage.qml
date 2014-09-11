@@ -28,6 +28,7 @@ Page {
     id: root
 
     property Task task
+    property Project project
 
     title: task.title
 
@@ -37,7 +38,7 @@ Page {
             text: "Edit task"
 
             onTriggered: {
-                pageStack.push(Qt.resolvedUrl("AddTaskPage.qml"), {task: task})
+                pageStack.push(Qt.resolvedUrl("AddTaskPage.qml"), {task: task, project: project})
             }
         },
 
