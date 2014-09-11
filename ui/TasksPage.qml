@@ -137,29 +137,6 @@ PageWithBottomEdge {
 
         anchors.fill: parent
         model: tasks
-
-        section.property: "section"
-        section.delegate: ListItem.Header {
-            text: section
-        }
-
-        delegate: TaskListItem {
-            id: listItem
-
-            checked: modelData.completed
-            text: formatText(modelData.title)
-            subText: modelData.dueDateString
-
-            onCheckedChanged: {
-                modelData.completed = checked
-                if (modelData)
-                    checked = Qt.binding(function() { return modelData.completed })
-            }
-
-            onClicked: {
-                pageStack.push(Qt.resolvedUrl("TaskDetailsPage.qml"), {task: modelData})
-            }
-        }
     }
 
     Column {
@@ -280,13 +257,16 @@ PageWithBottomEdge {
 
             return predicate.join(" AND ")
         }
-        sortBy: "completed,dueDate,title"
+        sortBy: "completed,dueDate,priority,title"
         _db: database
     }
 
     function formatText(text) {
         var regex = /(\d\d?:\d\d\s*(PM|AM|pm|am))/gi
         text = text.replace(regex, "<font color=\"#3ca83c\">$1</font>")
+        if (text.indexOf("!") != -1)
+            text = colorize(/*"<b>%1</b>".arg(*/text/*)*/, "#dd0000")
+
         return text
     }
 }

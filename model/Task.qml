@@ -25,13 +25,63 @@ Document {
     id: task
     _type: "Task"
 
-    _properties: ["title", "description", "completed", "dueDate", "projectId"]
+    _properties: [
+        "title",
+        "description",
+        "completed",
+        "dueDate",
+        "repeats",
+        "projectId",
+        "priority"
+    ]
 
     property string title
     property string description
     property bool completed: false
     property date dueDate
+    property string repeats: "never" // or "daily", "weekly", "monthly"
     property string projectId
+    property int priority
+
+    onLoaded: {
+        priority = title.indexOf("!") != -1 ? 0 : 1
+    }
+
+    // High priority if the title ends with "!", example: "Do this NOW!"
+    onTitleChanged: {
+        priority = title.indexOf("!") != -1 ? 0 : 1
+    }
+
+    onCompletedChanged: {
+        print("Completed changed!", isLoaded, completed, hasDueDate, repeats)
+        if (isLoaded && completed && hasDueDate && repeats !== "never") {
+            print("Updating new repeating task!")
+            var nextDueDate = new Date(dueDate.toISOString())
+            var today = new Date()
+
+            do {
+                if (repeats == "daily")
+                    nextDueDate.setDate(nextDueDate.getDate() + 1)
+                else if (repeats == "weekly")
+                    nextDueDate.setDate(nextDueDate.getDate() + 7)
+                else if (repeats == "monthly")
+                    nextDueDate.setMonth(nextDueDate.getMonth() + 1)
+            } while (DateUtils.dateIsBefore(nextDueDate, today));
+
+            print(dueDate, nextDueDate)
+
+            var tasks = _db.queryWithPredicate('Task', "dueDate == '%1' AND title == '%2'"
+                                               .arg(nextDueDate.toISOString())
+                                               .arg(title))
+            print("Task:", tasks)
+            if (tasks.length == 0) {
+                var json = toJSON()
+                json.completed = false
+                json.dueDate = nextDueDate
+                _db.create('Task', json)
+            }
+        }
+    }
 
     property bool hasDueDate: DateUtils.isValid(dueDate)
 
@@ -45,7 +95,6 @@ Document {
     }
 
     property string section: {
-        print("Updating sections")
         if (completed)
             return i18n.tr("Completed")
         else if (!hasDueDate)
@@ -54,6 +103,8 @@ Document {
             return i18n.tr("Overdue")
         else if (DateUtils.isToday(dueDate))
             return i18n.tr("Today")
+        else if (DateUtils.isTomorrow(dueDate))
+            return i18n.tr("Tomorrow")
         else if (DateUtils.isThisWeek(dueDate))
             return i18n.tr("This Week")
         else

@@ -26,15 +26,34 @@ UbuntuListView {
 
     StateSaver.properties: "contentY"
 
-    header: ListItem.ThinDivider {
-        visible: listView.contentY < units.dp(-5)
-    }
-
     move: Transition {
         UbuntuNumberAnimation { properties: "x,y"; duration: UbuntuAnimation.SlowDuration }
     }
 
     moveDisplaced: Transition {
         UbuntuNumberAnimation { properties: "x,y"; duration: UbuntuAnimation.SlowDuration }
+    }
+
+    section.property: "section"
+    section.delegate: ListItem.Header {
+        text: section
+    }
+
+    delegate: TaskListItem {
+        id: listItem
+
+        checked: modelData.completed
+        text: formatText(modelData.title)
+        subText: modelData.dueDateString
+
+        onCheckedChanged: {
+            modelData.completed = checked
+            if (modelData)
+                checked = Qt.binding(function() { return modelData.completed })
+        }
+
+        onClicked: {
+            pageStack.push(Qt.resolvedUrl("../ui/TaskDetailsPage.qml"), {task: modelData})
+        }
     }
 }

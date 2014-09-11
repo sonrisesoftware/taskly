@@ -41,6 +41,8 @@ MainView {
     */
     automaticOrientation: true
 
+    anchorToKeyboard: height > units.gu(120)
+
     // The size of the Nexus 4
     width: units.gu(42)
     height: units.gu(67)
@@ -98,27 +100,14 @@ MainView {
 
             Tab {
                 title: page.title
-                page: AboutPage {
-                    linkColor: colors["blue"]
-
-                    appName: i18n.tr("Taskly")
-                    icon: Qt.resolvedUrl("taskly.png")
-                    version: "@APP_VERSION@"
-
-                    website: "http://www.sonrisesoftware.com/apps/taskly"
-                    reportABug: "https://github.com/sonrisesoftware/taskly/issues"
-
-                    copyright: i18n.tr("Copyright (c) 2014 Michael Spencer")
-                    author: "Sonrise Software"
-                    contactEmail: "sonrisesoftware@gmail.com"
-                }
+                page: AboutTasklyPage {}
             }
         }
     }
 
     property var colors: {
-        "green": "#5cb85c",
-        "red": "#d9534f",
+        "green": "#3fb24f",
+        "red": "#fc4949",
         "yellow": "#f0ad4e",
         "blue": "#428bca",
         "orange": UbuntuColors.orange,
@@ -127,19 +116,17 @@ MainView {
         "overlay": "#666"
     }
 
+    function colorize(text, color) {
+        return "<font color=\"%1\">%2</font>".arg(color).arg(text)
+    }
+
     Database {
         id: database
 
-        version: 2
+        version: 1
         name: "taskly"
         description: "Taskly for Ubuntu Touch"
         modelPath: Qt.resolvedUrl("model")
-
-        onUpgrade: {
-            if (version < 2) {
-                tx.executeSql("ALTER TABLE Task ADD projectId TEXT");
-            }
-        }
     }
 }
 

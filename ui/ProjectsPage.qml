@@ -70,6 +70,7 @@ Page {
             onClicked: pageStack.push(Qt.resolvedUrl("TasksPage.qml"), {
                                           project: modelData
                                       })
+            progression: true
 
             QueryCount {
                 id: tasksCount

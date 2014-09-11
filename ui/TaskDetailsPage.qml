@@ -22,6 +22,7 @@ import Ubuntu.Components.Popups 1.0
 import Ubuntu.Components.ListItems 1.0 as ListItem
 
 import "../model"
+import "../components"
 
 Page {
     id: root
@@ -36,7 +37,7 @@ Page {
             text: "Edit task"
 
             onTriggered: {
-                pageStack.push(Qt.resolvedUrl("EditTaskPage.qml"), {task: task})
+                pageStack.push(Qt.resolvedUrl("AddTaskPage.qml"), {task: task})
             }
         },
 
@@ -52,20 +53,29 @@ Page {
 
     Column {
         anchors.fill: parent
-        anchors.margins: units.gu(2)
-        spacing: units.gu(1)
+        anchors.topMargin: units.gu(2)
 
-        Label {
-            text: task.hasDueDate ? i18n.tr("Due %1").arg(task.dueDateString) : ""
-            color: UbuntuColors.midAubergine
-        }
+        Column {
+            anchors {
+                left: parent.left
+                right: parent.right
 
-        Label {
-            width: parent.width
-            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                margins: units.gu(2)
+            }
+            spacing: units.gu(1)
 
-            text: task.description ? task.description : i18n.tr("No description")
-            color: task.description ? Theme.palette.selected.backgroundText : Theme.palette.normal.backgroundText
+            Label {
+                text: task.hasDueDate ? i18n.tr("Due %1").arg(task.dueDateString) : ""
+                color: UbuntuColors.midAubergine
+            }
+
+            Label {
+                width: parent.width
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+
+                text: task.description ? task.description : i18n.tr("No description")
+                color: task.description ? Theme.palette.selected.backgroundText : Theme.palette.normal.backgroundText
+            }
         }
     }
 }

@@ -17,26 +17,10 @@ Project {
         filter: "*.desktop"
     }
     Files {
-        filter: "www/*.html"
+        filter: "*.json"
     }
     Files {
         filter: "Makefile"
-    }
-    Files {
-        directory: "www"
-        filter: "*"
-    }
-    Files {
-        directory: "www/img/"
-        filter: "*"
-    }
-    Files {
-        directory: "www/css/"
-        filter: "*"
-    }
-    Files {
-        directory: "www/js/"
-        filter: "*"
     }
     Files {
         directory: "tests/"
