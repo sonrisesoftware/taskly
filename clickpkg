@@ -6,7 +6,7 @@ sudo rm $RELEASE_DIR -r
 cp . $RELEASE_DIR -r
 cd $RELEASE_DIR
 replace '@APP_VERSION@' $VERSION manifest.json
-replace '@APP_VERSION@' $VERSION ui/AboutPage.qml
+replace '@APP_VERSION@' $VERSION ui/AboutTasklyPage.qml
 
 cd ..
 click build v$VERSION
