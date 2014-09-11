@@ -32,7 +32,7 @@ PageWithBottomEdge {
     title: project ? project.title : "Tasks"
 
     property bool upcomingOnly
-    property bool showCompletedTasks
+    property bool showCompletedTasks: head.sections.selectedIndex == 1
     property bool showAllProjects
 
     property bool allowShowingCompletedTasks: true
@@ -48,6 +48,10 @@ PageWithBottomEdge {
         }
     }
 
+    head.sections {
+        model: allowShowingCompletedTasks && !searchQuery ? [i18n.tr("Upcoming"), i18n.tr("Completed")] : undefined
+    }
+
     state: "default"
     states: [
         PageHeadState {
@@ -57,20 +61,6 @@ PageWithBottomEdge {
                 Action {
                     iconName: "search"
                     onTriggered: page.state = "search"
-                },
-
-                // This will show as just a black square because of LP #1364572
-                Action {
-                    iconName: "select"
-                    text: "Show completed"
-                    visible: allowShowingCompletedTasks && !showCompletedTasks
-                    onTriggered: {
-                        pageStack.push(Qt.resolvedUrl("TasksPage.qml"), {
-                                           upcomingOnly: upcomingOnly,
-                                           showAllProjects: showAllProjects,
-                                           project: project, showCompletedTasks: true
-                                       })
-                    }
                 },
 
                 Action {
@@ -132,66 +122,40 @@ PageWithBottomEdge {
 
     flickable: state == "collapsed" ? listView : null
 
-    TasksListView {
-        id: listView
+    TabView {
+        id: tabView
+
+        model: tabs
+        currentIndex: showCompletedTasks ? 1 : 0
 
         anchors.fill: parent
-        model: tasks
     }
 
-    Column {
-        anchors.centerIn: parent
-        visible: tasks.count == 0
-        spacing: units.gu(0.5)
+    VisualItemModel {
+        id: tabs
 
-        Icon {
-            name: page.searchQuery ? "search"
-                                   : noTasksYet ? "add" : upcomingOnly ? "reminder" : "ok"
-            opacity: 0.5
-            width: units.gu(10)
-            height: width
-            anchors.horizontalCenter: parent.horizontalCenter
+        TasksView {
+            upcomingOnly: page.upcomingOnly
+            showCompletedTasks: false
+            showAllProjects: page.showAllProjects
+            project: page.project
+            searchQuery: page.searchQuery
+
+            width: tabView.width
+            height: tabView.height
         }
 
-        Item {
-            width: parent.width
-            height: units.gu(2)
-        }
+        TasksView {
+            upcomingOnly: page.upcomingOnly
+            showCompletedTasks: true
+            showAllProjects: page.showAllProjects
+            project: page.project
+            searchQuery: page.searchQuery
 
-        Label {
-            fontSize: "large"
-            anchors.horizontalCenter: parent.horizontalCenter
-            opacity: 0.5
-
-            text: page.searchQuery ? i18n.tr("No matching tasks")
-                                   : noTasksYet ? i18n.tr("No tasks yet!")
-                                                : upcomingOnly || !showCompletedTasks ? i18n.tr("Great job!")
-                                                                                      : i18n.tr("Nothing completed")
-            font.bold: true
-        }
-
-        Label {
-            fontSize: "large"
-            anchors.horizontalCenter: parent.horizontalCenter
-            opacity: 0.5
-            width: page.width - units.gu(6)
-            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-            horizontalAlignment: Text.AlignHCenter
-
-            text: page.searchQuery ? i18n.tr("No tasks match your search query")
-                                   : noTasksYet ? i18n.tr("Swipe up from the bottom of the screen to add tasks")
-                                                : upcomingOnly ? i18n.tr("No upcoming tasks")
-                                                               : showCompletedTasks ? i18n.tr("You haven't finished any tasks yet")
-                                                                                    : i18n.tr("Nothing to do")
-
+            width: tabView.width
+            height: tabView.height
         }
     }
-
-    Scrollbar {
-        flickableItem: listView
-    }
-
-
 
     Component {
         id: renameProjectDialog
@@ -210,63 +174,5 @@ PageWithBottomEdge {
                 PopupUtils.close(dialog)
             }
         }
-    }
-
-    property bool noTasksYet: allTasks.count == 0
-
-    QueryCount {
-        id: allTasks
-        _db: database
-        enabled: page.active
-        type: 'Task'
-        predicate: {
-            var predicate = []
-
-            if (!showAllProjects)
-                predicate.push("projectId == '%1'".arg(project ? project._id : ''))
-
-            print(predicate.join(" AND "))
-
-            return predicate.join(" AND ")
-        }
-    }
-
-    Query {
-        id: tasks
-        type: "Task"
-        groupBy: "section"
-        predicate: {
-            var predicate = []
-
-            if (upcomingOnly) {
-                predicate.push("dueDate != 'null'")
-            }
-
-            if (!showAllProjects)
-                predicate.push("projectId == '%1'".arg(project ? project._id : ''))
-
-            if (page.searchQuery) {
-                var query = page.searchQuery
-                query = query.replace('_', '\\_').replace('%', '\\%')
-                predicate.push("(UPPER(title) LIKE UPPER('%%1%') ESCAPE '\\')".arg(query))
-            }
-
-            predicate.push('(completed == %1)'.arg(showCompletedTasks ? '1' : '0'))
-
-            print(predicate.join(" AND "))
-
-            return predicate.join(" AND ")
-        }
-        sortBy: "completed,dueDate,priority,title"
-        _db: database
-    }
-
-    function formatText(text) {
-        var regex = /(\d\d?:\d\d\s*(PM|AM|pm|am))/gi
-        text = text.replace(regex, "<font color=\"#3ca83c\">$1</font>")
-        if (text.indexOf("!") != -1)
-            text = colorize(/*"<b>%1</b>".arg(*/text/*)*/, "#dd0000")
-
-        return text
     }
 }

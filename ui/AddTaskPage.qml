@@ -67,7 +67,7 @@ Page {
                                         dueDate: date,
                                         projectId: project ? project._id : "",
                                         repeats: repeats
-                                    }, tasks)
+                                    }, page)
                 } else {
                     task.title = titleField.text
                     task.description = descriptionField.text
