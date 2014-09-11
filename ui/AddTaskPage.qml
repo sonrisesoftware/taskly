@@ -25,6 +25,7 @@ import Ubuntu.Components.ListItems 1.0 as ListItem
 import "../model"
 import "../qml-extras/dateutils.js" as DateUtils
 import "../ubuntu-ui-extras"
+import "../components"
 
 Page {
     id: page
@@ -32,14 +33,14 @@ Page {
 
     property Project project
     property date date
-    property var checklist
+    property string repeats: "never"
 
     property Task task
 
     Component.onCompleted: {
         if (task != null) {
             date = task.dueDate
-            checklist = task.checklist
+            repeats = task.repeats
         }
     }
 
@@ -65,14 +66,14 @@ Page {
                                         description: descriptionField.text,
                                         dueDate: date,
                                         projectId: project ? project._id : "",
-                                        checklist: checklist
+                                        repeats: repeats
                                     }, tasks)
                 } else {
                     task.title = titleField.text
                     task.description = descriptionField.text
                     task.dueDate = date
                     task.projectId = project ? project._id : ""
-                    task.checklist = checklist
+                    task.repeats = repeats
                 }
 
                 pageStack.pop()
@@ -147,6 +148,23 @@ Page {
         duration: UbuntuAnimation.SlowDuration
     }
 
+    Rectangle {
+        anchors {
+            left: parent.left
+            right: parent.right
+            top: parent.top
+            bottom: footer.top
+        }
+
+        color: "black"
+
+        opacity: repeatsExpandable.expanded ? 0.5 : 0
+
+        Behavior on opacity {
+            UbuntuNumberAnimation {}
+        }
+    }
+
     Column {
         id: footer
 
@@ -154,7 +172,7 @@ Page {
             left: parent.left
             right: parent.right
             bottom: parent.bottom
-            bottomMargin: -footer.height
+            //bottomMargin: -footer.height
         }
 
         ListItem.ThinDivider {
@@ -164,29 +182,6 @@ Page {
                 leftMargin: units.gu(0)
                 rightMargin: units.gu(0)
             }
-        }
-
-        ListItem.SingleValue {
-            text: checklist ? i18n.tr("Checklist") : i18n.tr("Add checklist")
-            value: checklist ? checklist.join(", ") : ""
-            progression: true
-            showDivider: false
-
-            ListItem.ThinDivider {
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                    leftMargin: units.gu(-2)
-                    rightMargin: units.gu(-6)
-                    bottom: parent.bottom
-                }
-            }
-
-            onClicked: checklist = [
-                           {text: "A", completed: false},
-                           {text: "B", completed: true}
-                       ]
-
         }
 
         ListItem.SingleValue {
@@ -207,6 +202,102 @@ Page {
             }
 
             onClicked: PopupUtils.open(dateDialog)
+        }
+
+        ListItem.Expandable {
+            id: repeatsExpandable
+
+            visible: DateUtils.isValid(date)
+
+            anchors {
+                left: parent.left
+                right: parent.right
+                margins: units.gu(-2)
+            }
+
+            Rectangle {
+                anchors.fill: parent
+                anchors.bottomMargin: units.gu(-1)
+                color: app.backgroundColor
+                opacity: repeatsExpandable.expanded ? 1 : 0
+
+                Behavior on opacity {
+                    UbuntuNumberAnimation {}
+                }
+            }
+
+            collapseOnClick: true
+            expandedHeight: _contentColumn.height + units.gu(1)
+
+            Column {
+                id: _contentColumn
+                width: parent.width
+
+                Item {
+                    width: parent.width
+                    height: repeatsExpandable.collapsedHeight
+
+                    ListItem.SingleValue {
+                        id: _header
+                        text: repeatsExpandable.expanded ? i18n.tr("<b>Repeats</b>") : i18n.tr("Repeats")
+                        onClicked: repeatsExpandable.expanded = true
+
+                        Label {
+                            anchors {
+                                right: parent.right
+                                rightMargin: units.gu(3)
+                                verticalCenter: parent.verticalCenter
+                            }
+
+                            text: repeats.charAt(0).toUpperCase() + repeats.substring(1)
+                            color: UbuntuColors.midAubergine
+                        }
+
+                        Icon {
+                            id: _upArrow
+
+                            width: units.gu(2)
+                            height: width
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
+
+                            name: "go-down"
+                            color: "Grey"
+                            rotation: repeatsExpandable.expanded ? 180 : 0
+
+                            Behavior on rotation {
+                                UbuntuNumberAnimation {}
+                            }
+                        }
+                    }
+                }
+
+                ListView {
+                    id: _resultsList
+                    clip: true
+                    model: ["Never", "Daily", "Weekly", "Monthly"]
+                    width: parent.width
+                    height: units.gu(24)
+                    delegate: ListItem.Standard {
+                        Label {
+                            anchors {
+                                left: parent.left
+                                verticalCenter: parent.verticalCenter
+                                leftMargin: units.gu(3)
+                            }
+
+                            fontSize: "small"
+                            font.bold: modelData.toLowerCase() == repeats
+                            text: modelData
+                        }
+
+                        onClicked: {
+                            repeats = modelData.toLowerCase()
+                            repeatsExpandable.expanded = false
+                        }
+                    }
+                }
+            }
         }
 
         ListItem.SingleValue {

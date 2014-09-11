@@ -30,15 +30,20 @@ Document {
         "description",
         "completed",
         "dueDate",
+        "repeats",
         "projectId",
-        "checklist",
         "priority"
     ]
 
     property string title
+    property string description
+    property bool completed: false
+    property date dueDate
+    property string repeats: "never" // or "daily", "weekly", "monthly"
+    property string projectId
+    property int priority
 
     onLoaded: {
-        print("Initializing priority...")
         priority = title.indexOf("!") != -1 ? 0 : 1
     }
 
@@ -47,12 +52,36 @@ Document {
         priority = title.indexOf("!") != -1 ? 0 : 1
     }
 
-    property string description
-    property bool completed: false
-    property date dueDate
-    property string projectId
-    property var checklist
-    property int priority
+    onCompletedChanged: {
+        print("Completed changed!", isLoaded, completed, hasDueDate, repeats)
+        if (isLoaded && completed && hasDueDate && repeats !== "never") {
+            print("Updating new repeating task!")
+            var nextDueDate = new Date(dueDate.toISOString())
+            var today = new Date()
+
+            do {
+                if (repeats == "daily")
+                    nextDueDate.setDate(nextDueDate.getDate() + 1)
+                else if (repeats == "weekly")
+                    nextDueDate.setDate(nextDueDate.getDate() + 7)
+                else if (repeats == "monthly")
+                    nextDueDate.setMonth(nextDueDate.getMonth() + 1)
+            } while (DateUtils.dateIsBefore(nextDueDate, today));
+
+            print(dueDate, nextDueDate)
+
+            var tasks = _db.queryWithPredicate('Task', "dueDate == '%1' AND title == '%2'"
+                                               .arg(nextDueDate.toISOString())
+                                               .arg(title))
+            print("Task:", tasks)
+            if (tasks.length == 0) {
+                var json = toJSON()
+                json.completed = false
+                json.dueDate = nextDueDate
+                _db.create('Task', json)
+            }
+        }
+    }
 
     property bool hasDueDate: DateUtils.isValid(dueDate)
 
@@ -65,10 +94,7 @@ Document {
         }
     }
 
-    property bool hasChecklist: checklist != undefined
-
     property string section: {
-        print("Updating sections")
         if (completed)
             return i18n.tr("Completed")
         else if (!hasDueDate)

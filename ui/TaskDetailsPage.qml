@@ -77,32 +77,5 @@ Page {
                 color: task.description ? Theme.palette.selected.backgroundText : Theme.palette.normal.backgroundText
             }
         }
-
-        Item {
-            width: parent.width
-            height: units.gu(2)
-        }
-
-        ListItem.Header {
-            text: i18n.tr("Checklist")
-            visible: task.hasChecklist
-        }
-
-        Repeater {
-            model: task.checklist
-            delegate: TaskListItem {
-                text: modelData.text
-                checked: modelData.completed
-                //showDivider: false
-                opacity: 1
-                height: units.gu(5)
-            }
-        }
-
-        ListItem.Standard {
-            text: "<i>Add checklist item...</i>"
-            visible: task.hasChecklist
-            height: units.gu(5)
-        }
     }
 }

@@ -106,8 +106,8 @@ MainView {
     }
 
     property var colors: {
-        "green": "#5cb85c",
-        "red": "#d9534f",
+        "green": "#3fb24f",
+        "red": "#fc4949",
         "yellow": "#f0ad4e",
         "blue": "#428bca",
         "orange": UbuntuColors.orange,
@@ -123,26 +123,10 @@ MainView {
     Database {
         id: database
 
-        version: 4
+        version: 1
         name: "taskly"
         description: "Taskly for Ubuntu Touch"
         modelPath: Qt.resolvedUrl("model")
-
-        onUpgrade: {
-            if (version < 2) {
-                tx.executeSql("ALTER TABLE Task ADD projectId TEXT");
-            }
-
-            if (version < 3) {
-                print("Adding checklist column")
-                tx.executeSql("ALTER TABLE Task ADD checklist TEXT");
-            }
-
-            if (version < 4) {
-                print("Adding priority column")
-                tx.executeSql("ALTER TABLE Task ADD priority TEXT DEFAULT(0)");
-            }
-        }
     }
 }
 
