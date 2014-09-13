@@ -124,7 +124,7 @@ Item {
             var predicate = []
 
             if (upcomingOnly) {
-                predicate.push("dueDate != 'null'")
+                predicate.push("dueDate != ''")
             }
 
             if (!showAllProjects)
