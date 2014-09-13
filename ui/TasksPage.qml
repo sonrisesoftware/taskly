@@ -104,6 +104,8 @@ PageWithBottomEdge {
                 placeholderText: "Search..."
                 width: parent ? parent.width/* - units.gu(2)*/ : undefined
 
+                inputMethodHints: Qt.ImhNoPredictiveText
+
                 onTriggered: {
                     searchField.focus = false
                     Qt.inputMethod.hide()
@@ -135,6 +137,8 @@ PageWithBottomEdge {
         id: tabs
 
         TasksView {
+            id: upcomingTasks
+
             upcomingOnly: page.upcomingOnly
             showCompletedTasks: false
             showAllProjects: page.showAllProjects
@@ -146,6 +150,8 @@ PageWithBottomEdge {
         }
 
         TasksView {
+            id: completedTasks
+
             upcomingOnly: page.upcomingOnly
             showCompletedTasks: true
             showAllProjects: page.showAllProjects
