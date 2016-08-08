@@ -106,7 +106,7 @@ Page {
             }
 
             text: task ? task.title : ""
-            placeholderText: "Title"
+            placeholderText: i18n.tr("Title")
 
             Keys.onTabPressed: descriptionField.forceActiveFocus()
         }
@@ -120,7 +120,7 @@ Page {
             }
 
             text: task ? task.description : ""
-            placeholderText: "Description"
+            placeholderText: i18n.tr("Description")
 
             // Always showing at least 5 lines
             property int lines: Math.max(descriptionField.lineCount, 5)
@@ -185,7 +185,7 @@ Page {
         }
 
         ListItem.SingleValue {
-            text: DateUtils.isValid(date) ? "Change due date" : "Add due date"
+            text: DateUtils.isValid(date) ? i18n.tr("Change due date") : i18n.tr("Add due date")
             value: colorize(date.toDateString(), UbuntuColors.midAubergine)
 
             progression: true
@@ -318,7 +318,7 @@ Page {
 
         Dialog {
             id: dialog
-            title: DateUtils.isValid(date) ? "Change due date" : "Add due date"
+            title: DateUtils.isValid(date) ? i18n.tr("Change due date") : i18n.tr("Add due date")
             text: DateUtils.isValid(date) ? i18n.tr("Pick a new due date, or remove the existing one")
                                           : i18n.tr("Pick a date to set as the due date")
 
@@ -328,7 +328,7 @@ Page {
 
             Button {
                 width: parent.width
-                text: "Remove due date"
+                text: i18n.tr("Remove due date")
                 enabled: DateUtils.isValid(date)
                 color: colors["red"]
                 onTriggered: {
