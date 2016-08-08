@@ -28,12 +28,12 @@ import "../components"
 Page {
     id: page
 
-    title: "Projects"
+    title: i18n.tr("Projects")
 
     head.actions: [
         Action {
             iconName: "add"
-            text: "Add project"
+            text: i18n.tr("Add project")
             onTriggered: PopupUtils.open(addProjectDialog)
         }
     ]
@@ -44,9 +44,9 @@ Page {
         InputDialog {
             id: dialog
 
-            title: "Add project"
-            text: "Enter the name of the project:"
-            placeholderText: "Project name"
+            title: i18n.tr("Add project")
+            text: i18n.tr("Enter the name of the project:")
+            placeholderText: i18n.tr("Project name")
 
             onAccepted: {
                 database.create('Project', {'title': value})
@@ -66,7 +66,7 @@ Page {
         model: projects
         delegate: SubtitledListItem {
             text: modelData.title
-            subText: tasksCount.count == 1 ? "1 task" : "%1 tasks".arg(tasksCount.count)
+            subText: tasksCount.count == 1 ? i18n.tr("1 task") : i18n.tr("%1 tasks").arg(tasksCount.count)
             onClicked: pageStack.push(Qt.resolvedUrl("TasksPage.qml"), {
                                           project: modelData
                                       })
