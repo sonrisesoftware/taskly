@@ -1,0 +1,236 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-08-08 22:19+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ui/TaskDetailsPage.qml:38
+msgid "Edit task"
+msgstr "Modifier la tâche"
+
+#: ui/TaskDetailsPage.qml:47
+msgid "Delete task"
+msgstr "Supprimer la tâche"
+
+#: ui/TaskDetailsPage.qml:69
+#, qt-format
+msgid "Due %1"
+msgstr "Échéance %1"
+
+#: ui/TaskDetailsPage.qml:77
+msgid "No description"
+msgstr "Aucune description"
+
+#: model/Task.qml:99 ui/TasksPage.qml:52
+msgid "Completed"
+msgstr "Complétée"
+
+#: model/Task.qml:101
+msgid "No Due Date"
+msgstr "Aucune date d'échéance"
+
+#: model/Task.qml:103
+msgid "Overdue"
+msgstr "En retard"
+
+#: model/Task.qml:105
+msgid "Today"
+msgstr "Aujourd'hui"
+
+#: model/Task.qml:107
+msgid "Tomorrow"
+msgstr "Demain"
+
+#: model/Task.qml:109
+msgid "This Week"
+msgstr "Cette semaine"
+
+#: model/Task.qml:111 main.qml:70 ui/TasksPage.qml:52
+msgid "Upcoming"
+msgstr "À venir"
+
+#: components/TasksView.qml:73
+msgid "No matching tasks"
+msgstr "Aucune tâche correspondante"
+
+#: components/TasksView.qml:74
+msgid "Nothing completed"
+msgstr "Aucune tâche complétée"
+
+#: components/TasksView.qml:75
+msgid "No tasks yet!"
+msgstr "Pas encore de tâche !"
+
+#: components/TasksView.qml:76
+msgid "Great job!"
+msgstr "Beau boulot !"
+
+#: components/TasksView.qml:88
+msgid "No tasks match your search query"
+msgstr "Aucune tâche ne correspond à votre recherche"
+
+#: components/TasksView.qml:89
+msgid "You haven't finished any tasks yet"
+msgstr "Vous n'avez pas encore fini de tâche"
+
+#: components/TasksView.qml:90
+msgid "Swipe up from the bottom of the screen to add tasks"
+msgstr "Faites glisser votre doigt depuis le bord inférieur de l'écran pour ajouter des tâches"
+
+#: components/TasksView.qml:91
+msgid "No upcoming tasks"
+msgstr "Aucune tâche à venir"
+
+#: main.qml:84 ui/SelectProjectPage.qml:68 ui/AddTaskPage.qml:308
+msgid "Inbox"
+msgstr "Boîte de réception"
+
+#: main.qml:127
+msgid "taskly"
+msgstr "taskly"
+
+#: main.qml:128
+msgid "Taskly for Ubuntu Touch"
+msgstr "Taskly pour Ubuntu Touch"
+
+#: ui/ProjectsPage.qml:31 ui/SelectProjectPage.qml:86
+msgid "Projects"
+msgstr "Projets"
+
+#: ui/ProjectsPage.qml:36 ui/ProjectsPage.qml:47
+msgid "Add project"
+msgstr "Ajouter un projet"
+
+#: ui/ProjectsPage.qml:48
+msgid "Enter the name of the project:"
+msgstr "Saisissez le nom du projet :"
+
+#: ui/ProjectsPage.qml:49 ui/TasksPage.qml:174
+msgid "Project name"
+msgstr "Nom du projet"
+
+#: ui/ProjectsPage.qml:69
+msgid "1 task"
+msgstr "1 tâche"
+
+#: ui/ProjectsPage.qml:69
+#, qt-format
+msgid "%1 tasks"
+msgstr "%1 tâches"
+
+#: ui/ProjectsPage.qml:111
+msgid "No projects"
+msgstr "Aucun projet"
+
+#: ui/ProjectsPage.qml:119
+msgid "Tap the Add icon in the toolbar to add a project"
+msgstr "Appuyez sur l'icône « Ajouter » dans la barre d'outils pour ajouter un projet"
+
+#: ui/SelectProjectPage.qml:30
+msgid "Select Project"
+msgstr "Sélectionnez un projet"
+
+#: ui/SelectProjectPage.qml:34
+msgid "Cancel"
+msgstr "Annuler"
+
+#: ui/SelectProjectPage.qml:44
+msgid "Select project"
+msgstr "Sélectionnez un projet"
+
+#: ui/AboutTasklyPage.qml:7
+msgid "Taskly"
+msgstr "Taskly"
+
+#: ui/AboutTasklyPage.qml:14
+msgid "Copyright (c) 2014 Michael Spencer"
+msgstr "Copyright (c) 2014 Michael Spencer"
+
+#: ui/TasksPage.qml:68
+msgid "Delete project"
+msgstr "Supprimer le projet"
+
+#: ui/TasksPage.qml:79 ui/TasksPage.qml:172
+msgid "Rename project"
+msgstr "Renommer le projet"
+
+#: ui/TasksPage.qml:98
+msgid "back"
+msgstr "Retour"
+
+#: ui/TasksPage.qml:104
+msgid "Search..."
+msgstr "Recherche..."
+
+#: ui/TasksPage.qml:123 ui/AddTaskPage.qml:60
+msgid "Add task"
+msgstr "Ajouter une tâche"
+
+#: ui/TasksPage.qml:173
+msgid "Edit the name of the project:"
+msgstr "Modifier le nom du projet :"
+
+#: ui/AddTaskPage.qml:32
+msgid "Add Task"
+msgstr "Ajouter une tâche"
+
+#: ui/AddTaskPage.qml:32
+msgid "Edit Task"
+msgstr "Modifier la tâche"
+
+#: ui/AddTaskPage.qml:60
+msgid "Save task"
+msgstr "Enregistrer la tâche"
+
+#: ui/AddTaskPage.qml:109
+msgid "Title"
+msgstr "Titre"
+
+#: ui/AddTaskPage.qml:123
+msgid "Description"
+msgstr "Description"
+
+#: ui/AddTaskPage.qml:188 ui/AddTaskPage.qml:321
+msgid "Change due date"
+msgstr "Changer la date d'échéance"
+
+#: ui/AddTaskPage.qml:188 ui/AddTaskPage.qml:321
+msgid "Add due date"
+msgstr "Ajouter une date d'échéance"
+
+#: ui/AddTaskPage.qml:242
+msgid "<b>Repeats</b>"
+msgstr "<b>Répétitions</b>"
+
+#: ui/AddTaskPage.qml:242
+msgid "Repeats"
+msgstr "Répétitions"
+
+#: ui/AddTaskPage.qml:304
+msgid "Project"
+msgstr "Projet"
+
+#: ui/AddTaskPage.qml:322
+msgid "Pick a new due date, or remove the existing one"
+msgstr "Choisissez une nouvelle date ou supprimez celle existante"
+
+#: ui/AddTaskPage.qml:323
+msgid "Pick a date to set as the due date"
+msgstr "Choisissez une date à définir comme date d'échéance"
+
+#: ui/AddTaskPage.qml:331
+msgid "Remove due date"
+msgstr "Supprimer la date d'échéance"

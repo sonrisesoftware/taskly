@@ -65,7 +65,7 @@ PageWithBottomEdge {
 
                 Action {
                     iconName: "delete"
-                    text: "Delete project"
+                    text: i18n.tr("Delete project")
                     visible: project != null
 
                     onTriggered: {
@@ -76,7 +76,7 @@ PageWithBottomEdge {
 
                 Action {
                     iconName: "edit"
-                    text: "Rename project"
+                    text: i18n.tr("Rename project")
                     visible: project != null
                     onTriggered: PopupUtils.open(renameProjectDialog)
                 }
@@ -95,13 +95,13 @@ PageWithBottomEdge {
             }
             backAction: Action {
                 id: leaveSearchAction
-                text: "back"
+                text: i18n.tr("back")
                 iconName: "back"
                 onTriggered: page.state = "default"
             }
             contents: TextField {
                 id: searchField
-                placeholderText: "Search..."
+                placeholderText: i18n.tr("Search...")
                 width: parent ? parent.width/* - units.gu(2)*/ : undefined
 
                 inputMethodHints: Qt.ImhNoPredictiveText
@@ -169,9 +169,9 @@ PageWithBottomEdge {
         InputDialog {
             id: dialog
 
-            title: "Rename project"
-            text: "Edit the name of the project:"
-            placeholderText: "Project name"
+            title: i18n.tr("Rename project")
+            text: i18n.tr("Edit the name of the project:")
+            placeholderText: i18n.tr("Project name")
 
             value: project.title
 

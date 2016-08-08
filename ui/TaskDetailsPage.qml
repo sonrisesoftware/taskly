@@ -35,7 +35,7 @@ Page {
     head.actions: [
         Action {
             iconName: "edit"
-            text: "Edit task"
+            text: i18n.tr("Edit task")
 
             onTriggered: {
                 pageStack.push(Qt.resolvedUrl("AddTaskPage.qml"), {task: task, project: project})
@@ -44,7 +44,7 @@ Page {
 
         Action {
             iconName: "delete"
-            text: "Delete task"
+            text: i18n.tr("Delete task")
             onTriggered: {
                 task.remove()
                 pageStack.pop()

@@ -27,11 +27,11 @@ import "../udata"
 Page {
     id: page
 
-    title: "Select Project"
+    title: i18n.tr("Select Project")
 
     head.backAction: Action {
         iconName: "close"
-        text: "Cancel"
+        text: i18n.tr("Cancel")
         onTriggered: {
             pageStack.pop()
             rejected()
@@ -41,7 +41,7 @@ Page {
     head.actions: [
         Action {
             iconName: "ok"
-            text: "Select project"
+            text: i18n.tr("Select project")
             onTriggered: {
                 pageStack.pop()
                 accepted(selectedProjectId)

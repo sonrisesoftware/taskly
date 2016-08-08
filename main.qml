@@ -67,7 +67,7 @@ MainView {
                 page: TasksPage {
                     id: upcomingPage
 
-                    title: "Upcoming"
+                    title: i18n.tr("Upcoming")
                     upcomingOnly: true
                     showAllProjects: true
                     allowShowingCompletedTasks: false
@@ -81,7 +81,7 @@ MainView {
                 title: page.title
                 page: TasksPage {
                     id: inboxPage
-                    title: "Inbox"
+                    title: i18n.tr("Inbox")
 
                     // The Inbox page only shows tasks not associated with any project
                     showAllProjects: false
@@ -124,9 +124,8 @@ MainView {
         id: database
 
         version: 1
-        name: "taskly"
-        description: "Taskly for Ubuntu Touch"
+        name: i18n.tr("taskly")
+        description: i18n.tr("Taskly for Ubuntu Touch")
         modelPath: Qt.resolvedUrl("model")
     }
 }
-
